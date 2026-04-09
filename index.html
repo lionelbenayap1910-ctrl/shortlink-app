@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>shortlink.sytes.net - Bikin link pendek gratis</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #f1f5f9;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            padding: 2rem 1rem;
+            color: #1e293b;
+        }
+
+        .container {
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        /* header */
+        .header {
+            margin-bottom: 2rem;
+        }
+
+        .header h1 {
+            font-size: 2rem;
+            font-weight: 600;
+            color: #0f172a;
+            letter-spacing: -0.3px;
+        }
+
+        .header p {
+            color: #475569;
+            margin-top: 0.5rem;
+            font-size: 0.95rem;
+        }
+
+        /* card */
+        .card {
+            background: white;
+            border-radius: 20px;
+            padding: 1.8rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05), 0 1px 2px rgba(0,0,0,0.03);
+            border: 1px solid #e2e8f0;
+            margin-bottom: 2rem;
+        }
+
+        /* form group */
+        .form-group {
+            margin-bottom: 1.25rem;
+        }
+
+        label {
+            display: block;
+            font-size: 0.85rem;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+            color: #334155;
+        }
+
+        input {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 1px solid #cbd5e1;
+            border-radius: 14px;
+            font-size: 0.95rem;
+            transition: all 0.15s;
+            background: #ffffff;
+            outline: none;
+        }
+
+        input:focus {
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59,130,246,0.1);
+        }
+
+        .url-input {
+            font-family: monospace;
+        }
+
+        .row {
+            display: flex;
+            gap: 0.75rem;
+            align-items: flex-end;
+        }
+
+        .row .form-group {
+            flex: 1;
+            margin-bottom: 0;
+        }
+
+        button {
+            background: #3b82f6;
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 40px;
+            font-weight: 500;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: background 0.15s;
+            height: 48px;
+            white-space: nowrap;
+        }
+
+        button:hover {
+            background: #2563eb;
+        }
+
+        .custom-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 14px;
+            padding: 0.2rem 0.2rem 0.2rem 1rem;
+        }
+
+        .custom-wrapper span {
+            color: #64748b;
+            font-size: 0.85rem;
+            background: #f1f5f9;
+            padding: 0.2rem 0.5rem;
+            border-radius: 30px;
+            font-family: monospace;
+        }
+
+        .custom-wrapper input {
+            border: none;
+            background: transparent;
+            padding: 0.7rem 0;
+            flex: 1;
+        }
+
+        .custom-wrapper input:focus {
+            box-shadow: none;
+            border: none;
+        }
+
+        .helper-text {
+            font-size: 0.7rem;
+            color: #64748b;
+            margin-top: 0.35rem;
+        }
+
+        /* result area */
+        .result-area {
+            background: #f0fdf4;
+            border: 1px solid #bbf7d0;
+            border-radius: 18px;
+            padding: 1rem 1.2rem;
+            margin-top: 1.5rem;
+            display: none;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 0.8rem;
+        }
+
+        .result-area.show {
+            display: flex;
+        }
+
+        .short-link {
+            background: white;
+            padding: 0.5rem 1rem;
+            border-radius: 40px;
+            font-family: monospace;
+            font-size: 0.9rem;
+            color: #166534;
+            border: 1px solid #86efac;
+            word-break: break-all;
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 1px solid #22c55e;
+            color: #166534;
+            padding: 0.45rem 1.2rem;
+            height: auto;
+            font-size: 0.8rem;
+        }
+
+        .btn-outline:hover {
+            background: #dcfce7;
+        }
+
+        .btn-secondary {
+            background: #f1f5f9;
+            color: #1e293b;
+            border: 1px solid #cbd5e1;
+        }
+
+        .btn-secondary:hover {
+            background: #e2e8f0;
+        }
+
+        /* alert */
+        .alert {
+            padding: 0.7rem 1rem;
+            border-radius: 14px;
+            font-size: 0.85rem;
+            margin-top: 1rem;
+            display: none;
+        }
+
+        .alert-error {
+            background: #fef2f2;
+            border: 1px solid #fecaca;
+            color: #b91c1c;
+        }
+
+        .alert-success {
+            background: #f0fdf4;
+            border: 1px solid #bbf7d0;
+            color: #15803d;
+        }
+
+        /* history */
+        .history {
+            background: white;
+            border-radius: 20px;
+            border: 1px solid #e2e8f0;
+            padding: 1.5rem;
+        }
+
+        .history h3 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: #0f172a;
+        }
+
+        .history-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .history-item {
+            padding: 0.7rem 0.9rem;
+            background: #f8fafc;
+            border-radius: 14px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 0.6rem;
+            font-size: 0.85rem;
+        }
+
+        .history-url {
+            flex: 2;
+            min-width: 150px;
+        }
+
+        .history-short {
+            font-family: monospace;
+            color: #2563eb;
+            cursor: pointer;
+            text-decoration: underline;
+            text-underline-offset: 2px;
+            font-weight: 500;
+        }
+
+        .history-actions {
+            display: flex;
+            gap: 0.4rem;
+        }
+
+        .history-actions button {
+            background: transparent;
+            padding: 0.25rem 0.7rem;
+            height: auto;
+            font-size: 0.7rem;
+            border-radius: 30px;
+            color: #334155;
+            border: 1px solid #cbd5e1;
+        }
+
+        .history-actions button:hover {
+            background: #e2e8f0;
+        }
+
+        .delete-btn {
+            color: #dc2626 !important;
+            border-color: #fecaca !important;
+        }
+
+        .delete-btn:hover {
+            background: #fee2e2 !important;
+        }
+
+        .empty-history {
+            color: #94a3b8;
+            text-align: center;
+            padding: 1rem;
+            font-size: 0.85rem;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 2rem;
+            font-size: 0.7rem;
+            color: #94a3b8;
+        }
+
+        @media (max-width: 550px) {
+            .card {
+                padding: 1.2rem;
+            }
+            button {
+                padding: 0.7rem 1.2rem;
+            }
+            .row {
+                flex-direction: column;
+                align-items: stretch;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <h1>shortlink.sytes.net</h1>
+        <p>Bikin link pendek yang gampang diingat — gratis, simpel, tanpa ribet.</p>
+    </div>
+
+    <div class="card">
+        <div class="form-group">
+            <label>🔗 Link panjang</label>
+            <input type="url" id="longUrl" placeholder="https://contohblog.com/artikel-panjang-banget-tentang-apa-gitu" class="url-input">
+        </div>
+
+        <div class="form-group">
+            <label>✏️ Custom alias (opsional)</label>
+            <div class="custom-wrapper">
+                <span>shortlink.sytes.net/</span>
+                <input type="text" id="customSlug" placeholder="misal: promo-42 atau mylink">
+            </div>
+            <div class="helper-text">Hanya huruf kecil, angka, strip (-) dan underscore (_). Kosongkan biar random.</div>
+        </div>
+
+        <button id="shortenBtn" style="width: 100%; margin-top: 0.25rem;">➜ Pendekin sekarang</button>
+
+        <div id="resultPanel" class="result-area">
+            <span class="short-link" id="shortUrlDisplay">-</span>
+            <div style="display: flex; gap: 0.5rem;">
+                <button id="copyResultBtn" class="btn-outline">Salin</button>
+                <button id="visitResultBtn" class="btn-outline">Buka</button>
+            </div>
+        </div>
+
+        <div id="alertMessage" class="alert"></div>
+    </div>
+
+    <div class="history">
+        <h3>📋 Link pendek kamu</h3>
+        <div id="historyList" class="history-list">
+            <div class="empty-history">Belum ada link. Coba bikin satu di atas.</div>
+        </div>
+    </div>
+    <footer>Data disimpan di browser kamu. Link akan tetap ada sampai dihapus.</footer>
+</div>
+
+<script>
+    // ---------- STORAGE ----------
+    const STORAGE_KEY = 'shortlink_simple_app';
+    let linkDatabase = new Map(); // key = slug, value = { originalUrl, createdAt, clicks }
+
+    // Load data dari localStorage
+    function loadDatabase() {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (!raw) return;
+        try {
+            const obj = JSON.parse(raw);
+            for (const [slug, data] of Object.entries(obj)) {
+                if (data.originalUrl) {
+                    linkDatabase.set(slug, {
+                        originalUrl: data.originalUrl,
+                        createdAt: data.createdAt || new Date().toISOString(),
+                        clicks: typeof data.clicks === 'number' ? data.clicks : 0
+                    });
+                }
+            }
+        } catch(e) { console.warn(e); }
+    }
+
+    function saveDatabase() {
+        const exportObj = {};
+        for (let [slug, data] of linkDatabase.entries()) {
+            exportObj[slug] = {
+                originalUrl: data.originalUrl,
+                createdAt: data.createdAt,
+                clicks: data.clicks || 0
+            };
+        }
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(exportObj));
+    }
+
+    // Helper: base URL untuk short link (menggunakan domain sekarang + path)
+    function getBaseShortUrl() {
+        let origin = window.location.origin;
+        let pathname = window.location.pathname;
+        // hapus nama file index.html jika ada
+        let basePath = pathname.substring(0, pathname.lastIndexOf('/') + 1);
+        // jika akses langsung ke root atau file
+        if (origin.startsWith('file://')) {
+            // fallback untuk local file (tetap tampilkan path relatif)
+            return window.location.href.substring(0, window.location.href.lastIndexOf('/') + 1) + 'go/';
+        }
+        return origin + basePath + 'go/';
+    }
+
+    // validasi URL
+    function isValidUrl(url) {
+        try {
+            const u = new URL(url);
+            return u.protocol === 'http:' || u.protocol === 'https:';
+        } catch {
+            return false;
+        }
+    }
+
+    // generate slug random 6 karakter
+    function generateRandomSlug() {
+        const chars = 'abcdefghijklmnopqrstuvwxyz0123456789';
+        let slug = '';
+        for (let i = 0; i < 6; i++) {
+            slug += chars[Math.floor(Math.random() * chars.length)];
+        }
+        if (linkDatabase.has(slug)) return generateRandomSlug();
+        return slug;
+    }
+
+    // fungsi untuk membuat link pendek
+    function createShortLink(originalUrl, customSlugRaw) {
+        let finalSlug = '';
+        let custom = customSlugRaw ? customSlugRaw.trim().toLowerCase() : '';
+
+        if (custom !== '') {
+            // bersihkan karakter aneh
+            let cleanSlug = custom.replace(/[^a-z0-9\-_]/g, '');
+            if (cleanSlug.length === 0) {
+                throw new Error('Alias hanya boleh huruf kecil, angka, strip (-) dan underscore (_)');
+            }
+            if (linkDatabase.has(cleanSlug)) {
+                throw new Error('Alias "' + cleanSlug + '" sudah dipakai. Pilih yang lain.');
+            }
+            finalSlug = cleanSlug;
+        } else {
+            finalSlug = generateRandomSlug();
+        }
+
+        linkDatabase.set(finalSlug, {
+            originalUrl: originalUrl,
+            createdAt: new Date().toISOString(),
+            clicks: 0
+        });
+        saveDatabase();
+        renderHistory();
+        return finalSlug;
+    }
+
+    // fungsi untuk menampilkan pesan (success/error)
+    function showMessage(msg, isError = false) {
+        const alertDiv = document.getElementById('alertMessage');
+        alertDiv.textContent = msg;
+        alertDiv.className = 'alert ' + (isError ? 'alert-error' : 'alert-success');
+        alertDiv.style.display = 'block';
+        setTimeout(() => {
+            alertDiv.style.display = 'none';
+        }, 3000);
+    }
+
+    // tampilkan hasil shortlink di panel
+    function showResult(slug) {
+        const fullUrl = getBaseShortUrl() + slug;
+        const displaySpan = document.getElementById('shortUrlDisplay');
+        displaySpan.textContent = fullUrl;
+        const panel = document.getElementById('resultPanel');
+        panel.classList.add('show');
+        panel.setAttribute('data-current-slug', slug);
+        
+        // copy button
+        const copyBtn = document.getElementById('copyResultBtn');
+        const visitBtn = document.getElementById('visitResultBtn');
+        
+        // replace handler
+        const newCopyHandler = () => {
+            navigator.clipboard.writeText(fullUrl).then(() => {
+                showMessage('✅ Tautan pendek disalin!');
+            }).catch(() => {
+                // fallback
+                const ta = document.createElement('textarea');
+                ta.value = fullUrl;
+                document.body.appendChild(ta);
+                ta.select();
+                document.execCommand('copy');
+                document.body.removeChild(ta);
+                showMessage('✅ Tautan pendek disalin!');
+            });
+        };
+        
+        const newVisitHandler = () => {
+            window.open(fullUrl, '_blank');
+        };
+        
+        copyBtn.onclick = newCopyHandler;
+        visitBtn.onclick = newVisitHandler;
+    }
+
+    // proses utama dari tombol shorten
+    function handleShorten() {
+        let longUrl = document.getElementById('longUrl').value.trim();
+        if (!longUrl) {
+            showMessage('Masukkan URL dulu ya', true);
+            return;
+        }
+        
+        // tambahin https kalau ga ada protocol
+        if (!longUrl.startsWith('http://') && !longUrl.startsWith('https://')) {
+            longUrl = 'https://' + longUrl;
+        }
+        
+        if (!isValidUrl(longUrl)) {
+            showMessage('URL tidak valid. Pastikan pakai format yang benar (contoh: https://google.com)', true);
+            return;
+        }
+        
+        const customSlug = document.getElementById('customSlug').value;
+        try {
+            const newSlug = createShortLink(longUrl, customSlug);
+            // kosongkan custom slug setelah berhasil (opsional)
+            document.getElementById('customSlug').value = '';
+            document.getElementById('longUrl').value = '';
+            showResult(newSlug);
+            showMessage('Berhasil! Link pendek sudah siap dipakai ✨');
+        } catch (err) {
+            showMessage(err.message, true);
+        }
+    }
+
+    // render daftar riwayat
+    function renderHistory() {
+        const container = document.getElementById('historyList');
+        if (!container) return;
+        
+        if (linkDatabase.size === 0) {
+            container.innerHTML = '<div class="empty-history">Belum ada link. Coba bikin satu di atas.</div>';
+            return;
+        }
+        
+        // urut dari paling baru (createdAt descending)
+        const sorted = Array.from(linkDatabase.entries()).sort((a,b) => {
+            const dateA = new Date(a[1].createdAt || 0);
+            const dateB = new Date(b[1].createdAt || 0);
+            return dateB - dateA;
+        });
+        
+        let html = '';
+        for (let [slug, data] of sorted) {
+            const shortUrl = getBaseShortUrl() + slug;
+            let originalShort = data.originalUrl;
+            if (originalShort.length > 55) originalShort = originalShort.substring(0, 52) + '...';
+            html += `
+                <div class="history-item" data-slug="${slug}">
+                    <div class="history-url" title="${data.originalUrl.replace(/"/g, '&quot;')}">
+                        📎 ${originalShort}
+                    </div>
+                    <div class="history-short" data-shorturl="${shortUrl}">
+                        🔗 ${shortUrl}
+                    </div>
+                    <div class="history-actions">
+                        <button class="copy-history" data-url="${shortUrl}">Salin</button>
+                        <button class="visit-history" data-url="${data.originalUrl}">Buka</button>
+                        <button class="delete-history" data-slug="${slug}">Hapus</button>
+                    </div>
+                </div>
+            `;
+        }
+        container.innerHTML = html;
+        
+        // event untuk copy history
+        document.querySelectorAll('.copy-history').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const url = btn.getAttribute('data-url');
+                if (url) {
+                    navigator.clipboard.writeText(url).then(() => {
+                        showMessage('📋 Link pendek disalin!');
+                    }).catch(() => {
+                        // fallback
+                        const textarea = document.createElement('textarea');
+                        textarea.value = url;
+                        document.body.appendChild(textarea);
+                        textarea.select();
+                        document.execCommand('copy');
+                        document.body.removeChild(textarea);
+                        showMessage('📋 Link pendek disalin!');
+                    });
+                }
+            });
+        });
+        
+        // event buka link asli
+        document.querySelectorAll('.visit-history').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const targetUrl = btn.getAttribute('data-url');
+                if (targetUrl) window.open(targetUrl, '_blank');
+            });
+        });
+        
+        // event hapus
+        document.querySelectorAll('.delete-history').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const slugDel = btn.getAttribute('data-slug');
+                if (slugDel && linkDatabase.has(slugDel)) {
+                    linkDatabase.delete(slugDel);
+                    saveDatabase();
+                    renderHistory();
+                    // jika result panel sedang menampilkan slug yang dihapus, sembunyikan
+                    const panel = document.getElementById('resultPanel');
+                    const currentSlug = panel.getAttribute('data-current-slug');
+                    if (currentSlug === slugDel) {
+                        panel.classList.remove('show');
+                    }
+                    showMessage('Link berhasil dihapus');
+                }
+            });
+        });
+        
+        // event klik pada short link teks untuk salin
+        document.querySelectorAll('.history-short').forEach(el => {
+            el.addEventListener('click', (e) => {
+                const url = el.getAttribute('data-shorturl');
+                if (url) {
+                    navigator.clipboard.writeText(url);
+                    showMessage('✅ Tautan pendek disalin!');
+                }
+            });
+        });
+    }
+    
+    // ---------- REDIRECT HANDLER (jika user mengakses /go/[slug]) ----------
+    function handleRedirectIfNeeded() {
+        const currentPath = window.location.pathname;
+        // cari base path aplikasi
+        let basePath = window.location.pathname.substring(0, window.location.pathname.lastIndexOf('/') + 1);
+        let relative = currentPath.substring(basePath.length);
+        
+        // cek apakah mengarah ke go/xxxx
+        if (relative.startsWith('go/')) {
+            let slug = relative.substring(3); // setelah 'go/'
+            if (slug.includes('?')) slug = slug.split('?')[0];
+            if (slug.includes('#')) slug = slug.split('#')[0];
+            if (slug && linkDatabase.has(slug)) {
+                // tambah klik
+                const data = linkDatabase.get(slug);
+                data.clicks = (data.clicks || 0) + 1;
+                linkDatabase.set(slug, data);
+                saveDatabase();
+                // redirect ke original URL
+                window.location.href = data.originalUrl;
+                return true;
+            } else if (slug) {
+                // slug tidak ditemukan, tampilkan pesan di halaman (tapi tidak merusak UI)
+                document.body.innerHTML = `<div style="max-width:500px; margin:4rem auto; font-family:sans-serif; text-align:center; padding:2rem; background:white; border-radius:24px;"><h2>404</h2><p>Link pendek "<strong>${slug}</strong>" tidak ditemukan.</p><a href="/" style="color:#3b82f6;">← Kembali ke beranda</a></div>`;
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    // inisialisasi: load data, render, event
+    function init() {
+        loadDatabase();
+        // cek redirect dulu
+        const redirected = handleRedirectIfNeeded();
+        if (redirected) return; // redirect sudah terjadi, stop
+        
+        renderHistory();
+        
+        const shortenBtn = document.getElementById('shortenBtn');
+        shortenBtn.addEventListener('click', handleShorten);
+        
+        const longUrlInput = document.getElementById('longUrl');
+        longUrlInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') handleShorten();
+        });
+        
+        const customInput = document.getElementById('customSlug');
+        customInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') handleShorten();
+        });
+        
+        // optional: bersihkan pesan saat mulai
+    }
+    
+    // jalankan
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', init);
+    } else {
+        init();
+    }
+</script>
+</body>
+</html>
