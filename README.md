@@ -1,15 +1,15 @@
-# 🔗 Pendekin.link
+# 🔗 shortlink.sytes.net
 
-**Pendekin.link** adalah aplikasi web pemendek tautan (URL shortener) yang simpel, ringan, dan berjalan sepenuhnya di browser.  
+**shortlink.sytes.net** adalah aplikasi web pemendek tautan (URL shortener) yang simpel, ringan, dan berjalan sepenuhnya di browser.  
 Dibuat dengan HTML, CSS, dan JavaScript murni — tanpa backend, tanpa database eksternal. Semua data tersimpan di `localStorage` perangkat kamu.
 
 ## ✨ Fitur
 
 - 🔽 **Memendekkan URL panjang** menjadi tautan pendek
-- ✏️ **Custom alias** — buat short link sesuai keinginan (contoh: `pendekin.link/promo-42`)
+- ✏️ **Custom alias** — buat short link sesuai keinginan (contoh: `shortlink.sytes.net/promo-42`)
 - 🎲 **Random slug** otomatis jika custom alias dikosongkan
 - 📋 **Salin tautan** dengan satu klik
-- 🔁 **Redirect otomatis** — saat mengakses `pendekin.link/go/[slug]` akan diarahkan ke URL asli
+- 🔁 **Redirect otomatis** — saat mengakses `shortlink.sytes.net/go/[slug]` akan diarahkan ke URL asli
 - 📜 **Riwayat tautan** — semua short link yang pernah dibuat tersimpan
 - 🗑️ **Hapus tautan** dari riwayat kapan saja
 - 💾 **Data lokal** — tidak ada server, privasi tetap terjaga
@@ -28,7 +28,7 @@ Karena ini murni frontend, kamu bisa langsung membuka file `index.html` di brows
 
 ```bash
 # Clone repositori (atau download file)
-git clone https://github.com/username/pendekin-link.git
+git clone https://github.com/lionelbenayap1910-ctrl/shortlink-app.git
 cd shortlink-app
 
 # Buka dengan browser
